@@ -8,6 +8,7 @@
 #include "Square.h"
 #include "Reward.h"
 #include "Obstacle.h"
+#include "Point.h"
 
 using namespace std;
 using namespace sf;
@@ -15,7 +16,6 @@ using namespace sf;
 //SFML czyli Simple and Fast Multimedia Library to open sourcowa biblioteka obslugujaca multimedia, sfml jest zorientowana
 //obiektowo, ma dobra dokumentacje , stworzona jest glownie z mysl¹ o grach 2d, mamyy w niej takie Klasy jak Window, Sprite, Shape, Text, Event i
 //inne umo¿liwiaj¹ce wygodne tworzenie tego typu rozwi¹zañ jak ten projekt. Do reprezntacji punktu oraz wektora w przestrzeni mamy wektory.
-
 
 
 bool isIntersecting(Reward reward, Square square) // sprawdzenie czy pilka dotyka paletki
@@ -30,11 +30,23 @@ bool isIntersecting(Obstacle obstacle, Square square) // sprawdzenie czy pilka d
         && obstacle.bottom() >= square.top() && obstacle.top() <= square.bottom();
 }
 
+bool isIntersecting(Point point, Square square) // sprawdzenie czy pilka dotyka paletki
+{
+    return point.right() >= square.left() && point.left() <= square.right()
+        && point.bottom() >= square.top() && point.top() <= square.bottom();
+}
+
 
 int main()
 {
     Square square(50, 100); // kwadrat do poruszania nim
     Reward reward(725, 200); // nagroda (kulka na koncu labiryntu)
+    Reward monster(50, 400, Color::Red);
+    Reward monster3(440, 400, Color::Red);
+    Reward monster4(550, 400, Color::Red);
+    Point point(50, 300);
+    Point point2(50, 450);
+    Point point3(700, 400);
     Obstacle obstacle1(200, 25, 800, 50); // przeszkody kolejne:
     Obstacle obstacle2(250, 75, 50, 900);
     Obstacle obstacle3(600, 100, 400, 50);
@@ -53,8 +65,8 @@ int main()
     Text title; 
     Text enter;
     Text exit1;
-    Text win;
-    Text lost;
+    Text win, win2, win3, win4;
+    Text lost, lost1, lost2;
     Text again;
 
     Texture t;
@@ -64,6 +76,8 @@ int main()
     Texture t2;
     t2.loadFromFile("menu.jpg");
     Sprite bgc(t2); // klasa Sprite do wyswietlania obrazkow tutaj akurat objet s przyjmuje argument t z klasy texture
+
+    int points = 0;
 
     again.setFont(font);
     again.setCharacterSize(80);
@@ -100,12 +114,47 @@ int main()
     win.setPosition(200, 220);
     win.setString("Wygrales");
 
+    win2.setFont(font);
+    win2.setCharacterSize(80);
+    win2.setFillColor(Color::Blue);
+    win2.setStyle(Text::Bold);
+    win2.setPosition(100, 220);
+    win2.setString("Wygrales:1pkt");
+
+    win3.setFont(font);
+    win3.setCharacterSize(80);
+    win3.setFillColor(Color::Blue);
+    win3.setStyle(Text::Bold);
+    win3.setPosition(100, 220);
+    win3.setString("Wygrales:2pkt");
+
+    win4.setFont(font);
+    win4.setCharacterSize(80);
+    win4.setFillColor(Color::Blue);
+    win4.setStyle(Text::Bold);
+    win4.setPosition(100, 220);
+    win4.setString("Wygrales:3pkt");
+
     lost.setFont(font);
     lost.setCharacterSize(80);
     lost.setFillColor(Color::Blue);
     lost.setStyle(Text::Bold);
     lost.setPosition(180, 220);
     lost.setString("Przegrales");
+
+    lost1.setFont(font);
+    lost1.setCharacterSize(80);
+    lost1.setFillColor(Color::Blue);
+    lost1.setStyle(Text::Bold);
+    lost1.setPosition(90, 220);
+    lost1.setString("Przegrales:1pkt");
+
+    lost2.setFont(font);
+    lost2.setCharacterSize(80);
+    lost2.setFillColor(Color::Blue);
+    lost2.setStyle(Text::Bold);
+    lost2.setPosition(90, 220);
+    lost2.setString("Przegrales:2pkt");
 
     SoundBuffer buffer2;
     buffer2.loadFromFile("gameover.wav");
@@ -176,7 +225,13 @@ int main()
 
             window.draw(s); // tapeta ekranu glownego gry
             window.draw(reward);  // rysowanie nagrody (kulki)
+            window.draw(monster);     
+            window.draw(monster3);
+            window.draw(monster4);
             window.draw(square);  // rysowanie kwadratu
+            window.draw(point);
+            window.draw(point2);
+            window.draw(point3);
             window.draw(obstacle1); // rysowanie przeszkody
             window.draw(obstacle2);
             window.draw(obstacle3); 
@@ -189,10 +244,28 @@ int main()
 
             square.update(); // update pozycji kwadratu w zaleznosci od strza³ki
             reward.update(); // update pozycji nagrody, lata w gore i w dol stale
+            monster.updateMonster();
+            monster3.updateMonster();
+            monster4.updateMonster();
+
+            if (isIntersecting(point,square) || isIntersecting(point2, square) || isIntersecting(point3, square)  ) {
+              points++;          
+              if (isIntersecting(point, square)) {
+                  point.getOut();
+              }
+              else if (isIntersecting(point2, square)) {
+                  point2.getOut();
+              }
+              else if (isIntersecting(point3, square)) {
+                  point3.getOut();
+              }
+            }
 
             if (isIntersecting(obstacle1, square) || isIntersecting(obstacle2, square) || isIntersecting(obstacle3, square)
                 || isIntersecting(obstacle4, square) || isIntersecting(obstacle5, square) || isIntersecting(obstacle6, square)
-                || isIntersecting(obstacle7, square) || isIntersecting(obstacle8, square) || isIntersecting(obstacle9, square))
+                || isIntersecting(obstacle7, square) || isIntersecting(obstacle8, square) || isIntersecting(obstacle9, square)
+                || isIntersecting(monster,square) || isIntersecting(monster3, square) || isIntersecting(monster4, square)
+                )
             {
 
                 sound2.play();
@@ -210,16 +283,29 @@ int main()
 
                     if (Keyboard::isKeyPressed(Keyboard::Key::Enter)) {
                         square.setPos(); 
+                        point.setPos(50, 300);
+                        point2.setPos(50, 450);
+                        point3.setPos(700,400);
+                        points = 0;
                         break;                     
                     }
 
 
                     window.clear(Color::Red); // czyscimy ekran i ustawiamy tlo na czarno   
 
-                    window.draw(lost); // napis ze przegrales
-                    window.draw(again); // czy jeszcze raz? (napis)
+                     // napis ze przegrales
+                    if (points == 0) {
+                        window.draw(lost);
+                    }else if(points==1){
+                        window.draw(lost1);
+                     }
+                    else {
+                        window.draw(lost2);
+                    }
 
+                    window.draw(again); // czy jeszcze raz? (napis)          
                     window.display(); // metoda wyœwietla obiekty, bez niej nic by sie wyswietlilo sie, biale tlo    
+                    
                 }
             }
 
@@ -249,11 +335,27 @@ int main()
 
             window.clear(Color::Green); // czyscimy ekran i ustawiamy tlo     
 
-            window.draw(win); // napis ze wygrales
+            // napis ze wygrales
+            if (points == 0) {
+                window.draw(win);
+            }
+            else if (points == 1) {
+                window.draw(win2);
+            }
+            else if (points == 2) {
+                window.draw(win3);
+            }
+            else {
+                window.draw(win4);
+            }
             window.draw(again);
 
             if (Keyboard::isKeyPressed(Keyboard::Key::Enter)) {
                 square.setPos();
+                points = 0;
+                point.setPos(50, 300);
+                point2.setPos(50, 450);
+                point3.setPos(700, 400);
                 break;
             }
 

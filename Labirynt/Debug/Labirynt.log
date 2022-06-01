@@ -1,2 +1,4 @@
-﻿  Labirynt.cpp
+﻿  Point.cpp
+D:\LABIRYNT SFML\Labirynt\Labirynt\Point.cpp(21,29): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\LABIRYNT SFML\Labirynt\Labirynt\Point.cpp(21,26): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   Labirynt.vcxproj -> D:\LABIRYNT SFML\Labirynt\Debug\Labirynt.exe

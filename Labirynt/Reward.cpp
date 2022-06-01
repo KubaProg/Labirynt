@@ -8,6 +8,14 @@ Reward::Reward(float X, float Y)
 	circleShape.setOrigin(rewardRadius,rewardRadius); // punkt wzgledem ktorego dzieja sie przesuniêcia
 }
 
+Reward::Reward(float X, float Y, Color color)
+{
+	circleShape.setPosition(X, Y); // ustalamy pozycje kulki
+	circleShape.setRadius(rewardRadius); // ustaw promien kó³ka na ballRadius z klasy Ball 
+	circleShape.setFillColor(color); //ustawia kolor wypelnienia na bialy
+	circleShape.setOrigin(rewardRadius, rewardRadius); // punkt wzgledem ktorego dzieja sie przesuniêcia
+}
+
 void Reward::draw(RenderTarget& target, RenderStates state) const
 { //RenderTarget jest klas¹ bazow¹ aby tworzyc okno,tekstury itp 
 	target.draw(circleShape, state); //rysowanie obiektu, ogolnie metoda sprawia ze obiekt staje sie rysowalny/renderowalny
@@ -22,6 +30,19 @@ void Reward::update()
 	}
 
 	if (top() < 200) {
+		velocity.y = rewardSpeed;
+	}
+}
+
+void Reward::updateMonster()
+{
+	circleShape.move(velocity);
+
+	if (bottom() > 650) {
+		velocity = -velocity;
+	}
+
+	if (top() < 300) {
 		velocity.y = rewardSpeed;
 	}
 

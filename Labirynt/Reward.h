@@ -13,6 +13,7 @@ class Reward:public Drawable
 {
 public:
 	Reward(float X, float Y); // Konstruktor
+	Reward(float X, float Y, Color color);
 	Reward() = default; // Konstruktor, default zeby nie trzeba bylo w .cpp implementowac
 	~Reward() = default; // Destruktor, -||-
 
@@ -20,7 +21,8 @@ public:
 	float left();
 	float top();
 	float bottom();
-	void update(); // funkcja do aktualizacji stanu
+	void update(); // funkcja do aktualizacji stanu nagrody
+	void updateMonster(); // funkcja do aktualizacji stanu potwora
 
 	Vector2f getPosition();
 
@@ -31,7 +33,7 @@ public:
 	CircleShape circleShape; // obiekt figury (w naszym przypadku kola)
 
 	const float rewardRadius = 10;
-	const float rewardSpeed =  2;
+	const float rewardSpeed =  1.5;
 
 	Vector2f velocity{0,rewardSpeed}; // wektor do poruszania sie w wszystkie strony (lewo/prawo, góra/dol)
 

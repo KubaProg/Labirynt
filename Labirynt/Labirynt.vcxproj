@@ -146,12 +146,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Obstacle.cpp" />
+    <ClCompile Include="Point.cpp" />
     <ClCompile Include="Reward.cpp" />
     <ClCompile Include="Square.cpp" />
     <ClCompile Include="Labirynt.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Obstacle.h" />
+    <ClInclude Include="Point.h" />
     <ClInclude Include="Reward.h" />
     <ClInclude Include="Square.h" />
   </ItemGroup>
